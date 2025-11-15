@@ -1,5 +1,5 @@
 {
-    "name": "fintown/sdk",
+    "name": "fintown-sdk/project1",
     "description": "SDK",
     "type": "library",
     "require": {
