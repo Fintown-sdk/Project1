@@ -1,0 +1,23 @@
+{
+    "name": "fintown/sdk",
+    "description": "SDK",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.10",
+      "ext-json": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.4",
+        "phpstan/phpstan": "^1.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fintown\\Sdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Fintown"
+        }
+    ]
+}
