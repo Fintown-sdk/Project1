@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fintown\Sdk\LenderLoanAPI\REST;
 
-class CreateLoanRequest
+class CreateLoanRequest extends Request
 {
     use DataValidation;
 
@@ -148,13 +148,6 @@ class CreateLoanRequest
      * @var array<int, array<string, string>>
      */
     private $schedule;
-
-    // custom fields -------------------------
-
-    /**
-     * @var array<string, string>
-     */
-    private $custom = [];
 
     /**
      * @param string $lender_loan_id
@@ -355,13 +348,6 @@ class CreateLoanRequest
         return $this;
     }
 
-    public function addCustomData(string $key, string $value): self
-    {
-        $this->custom[$key] = $value;
-
-        return $this;
-    }
-
     /**
      * @return array<string, null|string|array<string, null|string>|array<int, array<string, string>>>
      */
@@ -429,7 +415,7 @@ class CreateLoanRequest
             'schedule' => $this->schedule,
         ];
 
-        $data = array_merge($data, $this->custom);
+        $data = $this->mergeCustomData($data);
 
         $this->validateData($data, $nullableFields);
 

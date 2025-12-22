@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fintown\Sdk\LenderLoanAPI\REST;
 
-class CreateLoanPaymentRequest
+class CreateLoanPaymentRequest extends Request
 {
     use DataValidation;
 
@@ -70,7 +70,7 @@ class CreateLoanPaymentRequest
     /**
      * @var array<int, array<string, string>>
      */
-    private $schedule_update;
+    private $schedule_update = [];
 
     public function setLoanPublicId(string $loan_public_id): self
     {
@@ -182,9 +182,13 @@ class CreateLoanPaymentRequest
             'received_total' => $this->received_total,
             'total_remaining_principal' => $this->total_remaining_principal,
             'payment_status' => $this->payment_status,
-
-            'schedule_update' => $this->schedule_update,
         ];
+        
+        if (!empty($this->schedule_update)) {
+			$data['schedule_update'] = $this->schedule_update;
+		}
+		
+        $data = $this->mergeCustomData($data);
 
         $this->validateData($data, $nullableFields);
 
