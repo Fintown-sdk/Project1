@@ -28,23 +28,18 @@ class Client
     /**
      * @param CreateLoanRequest $request
      * @return string loan_public_id
+     * @throws GuzzleException
      */
     public function createLoan(CreateLoanRequest $request): string
     {
-        try {
-            $response = $this->httpClient->request('POST', $this->endpoints::createLoan, [
-//                'debug' => true,
-                'connect_timeout' => 5.00,
-                'timeout' => 5.00,
-                'json' => $request->getData(),
-            ]);
+        $response = $this->httpClient->request('POST', $this->endpoints::createLoan, [
+            // 'debug' => true,
+            'connect_timeout' => 5.00,
+            'timeout' => 5.00,
+            'json' => $request->getData(),
+        ]);
 
-            $contents = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            echo $e->getMessage();
-
-            return '';
-        }
+        $contents = json_decode($response->getBody()->getContents());
 
         if (is_object($contents) && property_exists($contents, 'data')) {
             return $contents->data->loan_public_id;
@@ -56,52 +51,42 @@ class Client
     /**
      * @param CreateLoanPaymentRequest $request
      * @return array<string>
+     * @throws GuzzleException
      */
     public function createLoanPayment(CreateLoanPaymentRequest $request): array
     {
-        try {
-            $response = $this->httpClient->request('POST', $this->endpoints::createLoanPayment, [
-                'json' => $request->getData(),
-            ]);
 
-            $contents = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            echo $e->getMessage();
+        $response = $this->httpClient->request('POST', $this->endpoints::createLoanPayment, [
+            // 'debug' => true,
+            'json' => $request->getData(),
+        ]);
 
-            return [];
-        }
+        $contents = json_decode($response->getBody()->getContents());
 
-        if (!is_object($contents)) {
-            throw new \RuntimeException('contents is not an object');
-        }
-
-        if (!property_exists($contents, 'data')) {
-            throw new \RuntimeException('contents object has no data property');
+        if (is_object($contents) && property_exists($contents, 'data')) {
+            return [
+                'loan_public_id' => $contents->data->loan_public_id,
+                'transaction_public_id' => $contents->data->transaction_public_id,
+            ];
         }
 
         return [
-            'loan_public_id' => $contents->data->loan_public_id,
-            'transaction_public_id' => $contents->data->transaction_public_id,
+            'contents' => $contents,
         ];
     }
 
     /**
      * @param ExtendLoanRequest $request
      * @return array<string>
+     * @throws GuzzleException
      */
     public function extendLoan(ExtendLoanRequest $request): array
     {
-        try {
-            $response = $this->httpClient->request('POST', $this->endpoints::extendLoan, [
-                'json' => $request->getData(),
-            ]);
+        $response = $this->httpClient->request('POST', $this->endpoints::extendLoan, [
+            'json' => $request->getData(),
+        ]);
 
-            $contents = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            echo $e->getMessage();
-
-            return [];
-        }
+        $contents = json_decode($response->getBody()->getContents());
 
         if (!is_object($contents)) {
             throw new \RuntimeException('contents is not an object');
@@ -120,20 +105,15 @@ class Client
     /**
      * @param BuybackLoanRequest $request
      * @return array<string>
+     * @throws GuzzleException
      */
     public function buybackLoan(BuybackLoanRequest $request): array
     {
-        try {
-            $response = $this->httpClient->request('POST', $this->endpoints::buybackLoan, [
-                'json' => $request->getData(),
-            ]);
+        $response = $this->httpClient->request('POST', $this->endpoints::buybackLoan, [
+            'json' => $request->getData(),
+        ]);
 
-            $contents = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            echo $e->getMessage();
-
-            return [];
-        }
+        $contents = json_decode($response->getBody()->getContents());
 
         if (!is_object($contents)) {
             throw new \RuntimeException('contents is not an object');
@@ -152,21 +132,16 @@ class Client
     /**
      * @param string $loanId
      * @return array<string>
+     * @throws GuzzleException
      */
     public function loanDetails(string $loanId): array
     {
-        try {
-            $response = $this->httpClient->request('GET', $this->endpoints::viewLoan, [
-//                'debug' => true,
-                'query' => ['loan_public_id' => $loanId],
-            ]);
+        $response = $this->httpClient->request('GET', $this->endpoints::viewLoan, [
+            // 'debug' => true,
+            'query' => ['loan_public_id' => $loanId],
+        ]);
 
-            $contents = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            echo $e->getMessage();
-
-            return [];
-        }
+        $contents = json_decode($response->getBody()->getContents());
 
         if (!is_object($contents)) {
             throw new \RuntimeException('contents is not an object');
@@ -183,20 +158,15 @@ class Client
 
     /**
      * @return array
+     * @throws GuzzleException
      */
     public function loanList(): array
     {
-        try {
-            $response = $this->httpClient->request('GET', $this->endpoints::listLoans, [
-//                'debug' => true,
-            ]);
+        $response = $this->httpClient->request('GET', $this->endpoints::listLoans, [
+            // 'debug' => true,
+        ]);
 
-            $contents = json_decode($response->getBody()->getContents());
-        } catch (GuzzleException $e) {
-            echo $e->getMessage();
-
-            return [];
-        }
+        $contents = json_decode($response->getBody()->getContents());
 
         if (!is_object($contents)) {
             throw new \RuntimeException('contents is not an object');
